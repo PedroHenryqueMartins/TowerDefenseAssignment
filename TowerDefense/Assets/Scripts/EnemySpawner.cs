@@ -17,6 +17,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void Init(WaypointManager.Path path)
     {
+        ServiceLocator.Register<EnemySpawner>(this);
         _path = path;
     }
 
@@ -42,6 +43,7 @@ public class EnemySpawner : MonoBehaviour
         {
             GameObject go = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
             go.GetComponent<Enemy>().Initialize(_path);
+            ServiceLocator.Get<UIManager>().enemiesLeft = enemiesPerWave;
             yield return new WaitForSeconds(.5f);
         }
     }

@@ -16,10 +16,10 @@ public class Enemy : MonoBehaviour
     bool isDead = false;
 
     WaypointManager.Path path;
-    int currentWaypoint = 0;
+    public int currentWaypoint = 0;
     float currentHealth = 0.0f;
     float deathClipLength;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -101,7 +101,15 @@ public class Enemy : MonoBehaviour
     {
         isDead = true;
         agent.Stop();
-        yield return new WaitForSeconds(deathClipLength);
-        Destroy(gameObject, 3f);
+        yield return new WaitForSeconds(1);
+        ServiceLocator.Get<UIManager>().score += 50;
+        ServiceLocator.Get<UIManager>().enemiesLeft--;
+        ServiceLocator.Get<UIManager>().enemiesKilled++;
+        if (ServiceLocator.Get<UIManager>().enemiesLeft == 0)
+        {
+            ServiceLocator.Get<EnemySpawner>().enemiesPerWave += 1;
+        }
+        Destroy(gameObject);
     }
+
 }
